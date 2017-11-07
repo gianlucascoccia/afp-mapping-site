@@ -37,7 +37,7 @@ def after_questionaire(appname):
 # Utility function for safety url-check
 # Checks whether the app exists in our db, otherwise redirect to error page
 def activity_file_exists(appname: str) -> bool:
-    return os.path.isfile('apps/{}-activities.txt'.format(appname))
+    return os.path.isfile('apps/{}-activities.csv'.format(appname))
 
 
 # Page not found route

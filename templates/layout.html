@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>AFP - {% block title %}{% endblock %}</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"  type= "text/css" href= "{{url_for('static',filename='css/bootstrap.min.css')}}">
+    <link rel="stylesheet"  type= "text/css" href= "{{url_for('static',filename='css/main.css')}}">
+
+  </head>
+  <body>
+    <div id="content" class="container my-3">
+      {% block content %}{% endblock %}
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="{{url_for('static', filename='js/jquery-3.2.1.slim.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/popper.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+    <div id="footer">
+    </div>
+  </body>
+</html>

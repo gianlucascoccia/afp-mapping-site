@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block title %} A few remarks {% endblock %}
+{% block content %}
+<div id="remarks-title-container" class="row">
+    <div id="remarks-title" class="col-lg-10 col-md-offset-1">
+        <h4>A few remarks before the test...</h4>
+    </div>
+</div>
+<div id="remarks-body-container" class="row">
+    <div id="remarks-body" class="col-lg-10 col-md-offset-1">
+        <br>
+        <p>
+        In this test you will define the activity-functionality mapping for the app ''{{ appname }}''!
+        </p>
+        <p>
+        A few remarks:
+            <ul>
+                <li>
+                </li>
+                <li>
+                </li>
+                <li>
+                    We will observe and memorize the time it takes to complete the test.
+                </li>
+            </ul>
+        </p>
+        <p>
+        More information about our research project can be found in our paper <a href="{{url_for('static', filename='ICSE-POSTERS_2017.pdf')}}">User-centric Android flexible permissions</a>.
+        </p>
+    </div>
+</div>
+<div id="button-start-container" class="row">
+    <a type="button" class="btn btn-primary btn-block" href="/test/{{appname}}">Start test</a>
+</div>
+{% endblock %}

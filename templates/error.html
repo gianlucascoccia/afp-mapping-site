@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block title %} Error page {% endblock %}
+{% block content %}
+<div id="remarks-title-container" class="row">
+    <div id="remarks-title" class="col-lg-10 col-md-offset-1">
+        <h4>Whoops, something went wrong...</h4>
+    </div>
+</div>
+<div id="remarks-body-container" class="row">
+    <div id="remarks-body" class="col-lg-10 col-md-offset-1">
+        <br>
+        {% block message %}{% endblock %}
+        <p>
+        Please, tell us how you ended up on this page.
+        </p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+body {
+    background-color: #F5F8FA;
+    }
+
+h1, h2, h3, h4, h5 {
+    color: #332D29;
+}
+
+.btn, .btn-block, .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+    background-color: #487CB5 !important;
+    border-color: #487CB5 !important;
+    -webkit-appearance: none !important;
+}
+

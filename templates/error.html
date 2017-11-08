@@ -1,18 +1,37 @@
 {% extends "layout.html" %}
 {% block title %} Error page {% endblock %}
 {% block content %}
-<div id="remarks-title-container" class="row">
-    <div id="remarks-title" class="col-lg-10 col-md-offset-1">
+<div id="error-title-container" class="row">
+    <div id="error-title" class="col-lg-12">
         <h4>Whoops, something went wrong...</h4>
     </div>
 </div>
-<div id="remarks-body-container" class="row">
-    <div id="remarks-body" class="col-lg-10 col-md-offset-1">
+<div id="error-body-container" class="row">
+    <div id="error-body" class="col-lg-12">
         <br>
         {% block message %}{% endblock %}
         <p>
         Please, tell us how you ended up on this page.
         </p>
+        {% from "_formhelper.html" import render_field %}
+        <form method=post>
+            <dl>
+                <div id="error-form-row-one" class="row">
+                    <div class="col-lg-6">
+                        {{ render_field(form.name) }}
+                    </div>
+                    <div class="col-lg-6">
+                        {{ render_field(form.email) }}
+                    </div>
+                </div>
+                <div id="error-form-row-two" class="row">
+                    <div class="col-lg-12">
+                        {{ render_field(form.message) }}
+                    </div>
+                </div>
+            </dl>
+        <p><input type="submit" value="Send" class="btn btn-primary btn-block">
+        </form>
     </div>
 </div>
 {% endblock %}

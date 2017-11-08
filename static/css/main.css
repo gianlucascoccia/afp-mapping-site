@@ -1,5 +1,5 @@
 body {
-    background-color: #F5F8FA;
+    background-color: #EAF0F6;
     }
 
 h1, h2, h3, h4, h5 {
@@ -12,3 +12,10 @@ h1, h2, h3, h4, h5 {
     -webkit-appearance: none !important;
 }
 
+textarea#message {
+    min-height: 200px;
+}
+
+.help-block {
+    color: red;
+}

@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block title %} Android fine-grained permissions {% endblock %}
+{% block content %}
+<div id="about-title-container" class="row">
+<div class="col"></div>
+    <div id="about-title" class="col-lg-10 col-md-offset-1">
+        <h4>Thanks for stopping by...</h4>
+    </div>
+<div class="col"></div>
+</div>
+<div id="about-body-container" class="row">
+<div class="col"></div>
+    <div id="about-body" class="col-lg-10 col-md-offset-1">
+        <br>
+        <p>
+        ... unfortunately this website is currently available only to a few selected users. It is part of a research project that aims at making Android permission system more flexible and user-centric.
+        </p>
+        <p>
+        More information about our research project can be found in our paper <a href="{{url_for('static', filename='ICSE-POSTERS_2017.pdf')}}">User-centric Android flexible permissions</a>.
+        </p>
+    </div>
+<div class="col"></div>
+</div>
+{% endblock %}

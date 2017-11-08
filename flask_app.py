@@ -1,7 +1,20 @@
+import sys
 import os.path
 from flask import Flask, render_template
 
 app = Flask(__name__)
+
+# Set some variables according to whether we are on production or development
+if app.config['DEBUG']:
+    # We are in development
+    # Sets activities list folder
+    APPS_FOLDER = "apps"
+    pass
+else:
+    # We are in production
+    # Sets activities list folder
+    APPS_FOLDER = ""
+    pass
 
 
 # Default route
@@ -37,7 +50,8 @@ def after_questionaire(appname):
 # Utility function for safety url-check
 # Checks whether the app exists in our db, otherwise redirect to error page
 def activity_file_exists(appname: str) -> bool:
-    return os.path.isfile('apps/{}-activities.csv'.format(appname))
+    print('{}/{}-activities.csv'.format(APPS_FOLDER, appname))
+    return os.path.isfile('{}/{}-activities.csv'.format(APPS_FOLDER, appname))
 
 
 # Page not found route

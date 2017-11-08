@@ -1,7 +1,9 @@
 import os.path
 import csv
+import datetime
 from flask import Flask, render_template, request
 from contact_form import ContactForm
+from mapping_form import MappingForm
 
 app = Flask(__name__)
 
@@ -29,6 +31,7 @@ def default():
 # Pre-test questionaire
 @app.route('/before-test/<appname>', methods=['GET', 'POST'])
 def before_explanation(appname):
+    # error handling: wrong url access
     if not activity_file_exists(appname):
         return handle_app_not_exists(appname)
     return render_template('before_test.html', appname=appname)
@@ -37,14 +40,39 @@ def before_explanation(appname):
 # Mappping test
 @app.route('/test/<appname>', methods=['GET', 'POST'])
 def test(appname):
+    submitted_feature, submitted_description = "", ""
+    timestamp = datetime.datetime.utcnow()
+    # error handling: wrong url access
     if not activity_file_exists(appname):
         return handle_app_not_exists(appname)
-    return 'Testooo!'
+
+    # load the list of activities for the app
+    with open('{}/{}-activities.csv'.format(APPS_FOLDER, appname), "r") as activities_file:
+        reader = csv.reader(activities_file, delimiter=";")
+        activities = [activity for activity in reader]
+
+    form = MappingForm(request.form)
+    if request.method == 'POST' and form.validate():
+        # if a mapping was submitted, retrieve it's data and reset form
+        submitted_feature = form.feature_name.data
+        submitted_description = form.feature_description.data
+        #activities
+        form.feature_name.data, form.feature_description.data = "", ""
+
+    # store data to file
+    with open(os.path.join(OUT_FOLDER, '{}-mappings.csv'.format(appname)), 'a') as csv_file:
+        writer = csv.writer(csv_file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        writer.writerow([timestamp, submitted_feature, submitted_description])
+        csv_file.flush()
+
+    return render_template('test.html', appname=appname, form=form,
+                           submitted_feature=submitted_feature, activities=activities)
 
 
 # Post-test questionaire
 @app.route('/after-test/<appname>', methods=['GET', 'POST'])
 def after_questionaire(appname):
+    # error handling: wrong url access
     if not activity_file_exists(appname):
         return handle_app_not_exists(appname)
     return 'Questionaire!'
@@ -53,13 +81,15 @@ def after_questionaire(appname):
 # Page not found route
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('page_not_found.html'), 404
+    form = ContactForm(request.form)
+    if request.method == 'POST' and form.validate():
+        return handle_error_submit(form)
+    return render_template('page_not_found.html', form=form), 404
 
 
 # Utility function for safety url-check
 # Checks whether the app exists in our db, otherwise redirect to error page
 def activity_file_exists(appname: str) -> bool:
-    print('{}/{}-activities.csv'.format(APPS_FOLDER, appname))
     return os.path.isfile('{}/{}-activities.csv'.format(APPS_FOLDER, appname))
 
 
@@ -67,10 +97,15 @@ def activity_file_exists(appname: str) -> bool:
 def handle_app_not_exists(appname):
     form = ContactForm(request.form)
     if request.method == 'POST' and form.validate():
-        name,email,message = form.name.data, form.email.data, form.message.data
-        with open(os.path.join(OUT_FOLDER,'messages.csv'), 'a') as csvfile:
-            writer = csv.writer(csvfile, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            writer.writerow([name] + [email] + [message])
-            csvfile.flush()
-        return render_template('message_sent.html', name=name)
+        return handle_error_submit(form)
     return render_template('app_not_found.html', appname=appname, form=form)
+
+
+# Utility function to handle the error report page
+def handle_error_submit(form):
+    name, email, message = form.name.data, form.email.data, form.message.data
+    with open(os.path.join(OUT_FOLDER, 'messages.csv'), 'a') as csv_file:
+        writer = csv.writer(csv_file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        writer.writerow([name, email, message])
+        csv_file.flush()
+    return render_template('message_sent.html', name=name)

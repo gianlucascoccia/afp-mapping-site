@@ -19,3 +19,20 @@ textarea#message {
 .help-block {
     color: red;
 }
+
+#test-form-row-one-right{
+    min-height: 150px;
+    oveflow: scroll;
+}
+
+#test-form-row-two-right{
+    padding-top: 50px;
+}
+
+#button-end-test-container{
+    margin-top: 50px;
+}
+
+#submit_feedback{
+    color: #007bff;
+}

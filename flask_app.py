@@ -13,7 +13,7 @@ if app.config['DEBUG']:
 else:
     # We are in production
     # Sets activities list folder
-    APPS_FOLDER = ""
+    APPS_FOLDER = "/home/Fragoel2/afp-mapping-site/apps"
     pass
 
 

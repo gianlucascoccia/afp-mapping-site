@@ -20,8 +20,9 @@ textarea#message {
     color: red;
 }
 
-#test-form-row-one-right{
+#test-form-row-two-left{
     min-height: 150px;
+    max-height: 500px;
     oveflow: scroll;
 }
 

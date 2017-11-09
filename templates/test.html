@@ -26,12 +26,12 @@
                         {{ render_field(form.feature_name) }}
                     </div>
                     <div id="test-form-row-one-right" class="col-lg-6">
-                        <b>App activities</b>
+                        {{ render_field(form.feature_description) }}
                     </div>
                 </div>
                 <div id="test-form-row-two" class="row">
                     <div id="test-form-row-two-left" class="col-lg-6">
-                        {{ render_field(form.feature_description) }}
+                        {{ render_field(form.activities) }}
                     </div>
                     <div id="test-form-row-two-right" class="col-lg-6">
                         <input type="submit" value="Submit" class="btn btn-primary btn-block">

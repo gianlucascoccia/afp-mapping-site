@@ -2,6 +2,7 @@ import os.path
 import csv
 import datetime
 from flask import Flask, render_template, request
+
 from contact_form import ContactForm
 from mapping_form import MappingForm
 
@@ -47,16 +48,18 @@ def test(appname):
         return handle_app_not_exists(appname)
 
     # load the list of activities for the app
-    with open('{}/{}-activities.csv'.format(APPS_FOLDER, appname), "r") as activities_file:
-        reader = csv.reader(activities_file, delimiter=";")
-        activities = [activity for activity in reader]
+    activities_file = open('{}/{}-activities.csv'.format(APPS_FOLDER, appname), "r")
+    reader = csv.reader(activities_file, delimiter=";")
+    activities = [(activity[0], activity[0]) for activity in reader]
+    activities_file.close()
 
     form = MappingForm(request.form)
+    form.activities.choices = activities
     if request.method == 'POST' and form.validate():
         # if a mapping was submitted, retrieve it's data and reset form
         submitted_feature = form.feature_name.data
         submitted_description = form.feature_description.data
-        #activities
+        # activities
         form.feature_name.data, form.feature_description.data = "", ""
 
     # store data to file

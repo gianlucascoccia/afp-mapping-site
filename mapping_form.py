@@ -9,7 +9,6 @@ class MappingForm(Form):
     submit = SubmitField("Submit")
 
     def validate_activities(self, field):
-        print(field.data)
         if len(field.data) == 0:
             raise ValidationError('Must select at least one activity')
 

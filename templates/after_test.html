@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block title %} Final questions {% endblock %}
+{% block content %}
+<div id="questionaire-title-container" class="row">
+    <div id="questionaire-title" class="col-lg-10 col-md-offset-1">
+        <h4>Last few questions</h4>
+    </div>
+</div>
+<div id="questionaire-body-container" class="row">
+    <div class="col"></div>
+    <div id="questionaire-body" class="col-lg-10 col-md-offset-1">
+        <br>
+        {% from "_formhelper.html" import render_field %}
+        <form method=post>
+            <dl>
+                <div id="questionaire-form-row-one" class="row">
+                    <div id="questionaire-form-row-one-col" class="col-lg-12">
+                        {{ render_field(form.question_one) }}
+                    </div>
+                </div>
+                <div id="questionaire-form-row-two" class="row">
+                    <div id="questionaire-form-row-two-col" class="col-lg-12">
+                        {{ render_field(form.question_two) }}
+                    </div>
+                </div>
+                <div id="questionaire-form-row-three" class="row">
+                    <div id="questionaire-form-row-three-col" class="col-lg-12">
+                        {{ render_field(form.question_three) }}
+                    </div>
+                </div>
+                <div id="questionaire-form-row-four" class="row">
+                    <div id="test-form-row-four-right" class="col-lg-12">
+                        <input type="submit" value="Submit" class="btn btn-primary btn-block">
+                    </div>
+                </div>
+            </dl>
+        </form>
+    </div>
+    <div class="col"></div>
+</div>
+{% endblock %}

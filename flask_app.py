@@ -5,6 +5,7 @@ from flask import Flask, render_template, request
 
 from contact_form import ContactForm
 from mapping_form import MappingForm
+from questionaire_form import QuestionaireForm
 
 app = Flask(__name__)
 
@@ -14,13 +15,11 @@ if app.config['DEBUG']:
     # Sets activities list folder
     APPS_FOLDER = "apps"
     OUT_FOLDER = "out"
-    pass
 else:
     # We are in production
     # Sets activities list folder
     APPS_FOLDER = "/home/Fragoel2/afp-mapping-site/apps"
     OUT_FOLDER = "/home/Fragoel2/afp-mapping-site/out"
-    pass
 
 
 # Default route
@@ -80,7 +79,15 @@ def after_questionaire(appname):
     # error handling: wrong url access
     if not activity_file_exists(appname):
         return handle_app_not_exists(appname)
-    return 'Questionaire!'
+
+    form = QuestionaireForm(request.form)
+    if request.method == 'POST' and form.validate():
+        with open(os.path.join(OUT_FOLDER, '{}-questions.csv'.format(appname)), 'a') as csv_file:
+            writer = csv.writer(csv_file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            writer.writerow([form.data])
+            csv_file.flush()
+        return render_template('completed.html')
+    return render_template('after_test.html', form=form)
 
 
 # Page not found route

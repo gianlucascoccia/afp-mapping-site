@@ -41,7 +41,7 @@ def before_explanation(appname):
 # Mappping test
 @app.route('/test/<appname>', methods=['GET', 'POST'])
 def test(appname):
-    submitted_feature, submitted_description = "", ""
+    submitted_feature, submitted_description, submitted_activities = None, None, None
     timestamp = datetime.datetime.utcnow()
     # error handling: wrong url access
     if not activity_file_exists(appname):
@@ -59,14 +59,16 @@ def test(appname):
         # if a mapping was submitted, retrieve it's data and reset form
         submitted_feature = form.feature_name.data
         submitted_description = form.feature_description.data
-        # activities
-        form.feature_name.data, form.feature_description.data = "", ""
+        submitted_activities = form.activities.data
 
     # store data to file
-    with open(os.path.join(OUT_FOLDER, '{}-mappings.csv'.format(appname)), 'a') as csv_file:
-        writer = csv.writer(csv_file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        writer.writerow([timestamp, submitted_feature, submitted_description])
-        csv_file.flush()
+    if request.method == 'GET' or form.validate():
+        with open(os.path.join(OUT_FOLDER, '{}-mappings.csv'.format(appname)), 'a') as csv_file:
+            writer = csv.writer(csv_file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            writer.writerow([timestamp, submitted_feature, submitted_description, submitted_activities])
+            csv_file.flush()
+        # reset form
+        form.feature_name.data, form.feature_description.data, form.activities.data = None, None, None
 
     return render_template('test.html', appname=appname, form=form,
                            submitted_feature=submitted_feature, activities=activities)

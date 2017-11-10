@@ -27,7 +27,7 @@ textarea#message {
 }
 
 #test-form-row-two-right{
-    padding-top: 50px;
+    padding-top: 120px;
 }
 
 #button-end-test-container{
@@ -36,4 +36,13 @@ textarea#message {
 
 #submit_feedback{
     color: #007bff;
+}
+
+ul {
+    list-style-type: none;
+}
+
+#activities {
+    overflow-y: scroll;
+    height: 200px;
 }

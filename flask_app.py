@@ -80,14 +80,7 @@ def after_questionaire(appname):
     if not activity_file_exists(appname):
         return handle_app_not_exists(appname)
 
-    form = QuestionaireForm(request.form)
-    if request.method == 'POST' and form.validate():
-        with open(os.path.join(OUT_FOLDER, '{}-questions.csv'.format(appname)), 'a') as csv_file:
-            writer = csv.writer(csv_file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            writer.writerow([form.data])
-            csv_file.flush()
-        return render_template('completed.html')
-    return render_template('after_test.html', form=form)
+    return render_template('after_test.html')
 
 
 # Page not found route

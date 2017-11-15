@@ -1,13 +1,16 @@
 import os.path
 import csv
 import datetime
-from flask import Flask, render_template, request
-
+from flask import Flask, render_template, request, url_for
+from werkzeug.utils import redirect
+from wtforms import StringField, validators, TextAreaField
 from contact_form import ContactForm
 from mapping_form import MappingForm
-from questionaire_form import QuestionaireForm
+from multi_checkbox import MultiCheckboxField
 
 app = Flask(__name__)
+feature_list = []
+feature_count = 1
 
 # Set some variables according to whether we are on production or development
 if app.config['DEBUG']:
@@ -40,8 +43,7 @@ def before_explanation(appname):
 # Mappping test
 @app.route('/test/<appname>', methods=['GET', 'POST'])
 def test(appname):
-    submitted_feature, submitted_description, submitted_activities = None, None, None
-    timestamp = datetime.datetime.utcnow()
+
     # error handling: wrong url access
     if not activity_file_exists(appname):
         return handle_app_not_exists(appname)
@@ -52,25 +54,55 @@ def test(appname):
     activities = [(activity[0], activity[0]) for activity in reader]
     activities_file.close()
 
+    # First access to page
+    if request.method == 'GET':
+        global feature_list
+        global feature_count
+        feature_count = 0
+        feature_list = [feature_count]
+
+    # Handle case in which we need to add a field to form
+    if request.method == 'POST' and request.form['submit'] == 'Add new row':
+        global feature_count
+        feature_count += 1
+        feature_list.append(feature_count)
+        print("Addition")
+        print(feature_count)
+        print(feature_list)
+
+    # Handle case in which we need to remove a field to form
+    if request.method == 'POST' and request.form['submit'].startswith('Delete row '):
+        removal_id = int(request.form['submit'][-1]) - 1
+        global feature_list
+        feature_list.pop(removal_id)
+        MappingForm.delete_form_field_dinamically(removal_id)
+        print("Removal")
+        print(removal_id)
+        print(feature_list)
+
+    # build form dynamically
+    MappingForm.build_mapping_form_dinamically(feature_list, activities)
     form = MappingForm(request.form)
-    form.activities.choices = activities
-    if request.method == 'POST' and form.validate():
-        # if a mapping was submitted, retrieve it's data and reset form
-        submitted_feature = form.feature_name.data
-        submitted_description = form.feature_description.data
-        submitted_activities = form.activities.data
 
-    # store data to file
-    if request.method == 'GET' or form.validate():
-        with open(os.path.join(OUT_FOLDER, '{}-mappings.csv'.format(appname)), 'a') as csv_file:
-            writer = csv.writer(csv_file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            writer.writerow([timestamp, submitted_feature, submitted_description, submitted_activities])
-            csv_file.flush()
-        # reset form
-        form.feature_name.data, form.feature_description.data, form.activities.data = None, None, None
+    # Handle cases in which form was submitted
+    if request.method == 'POST':
+        print(form.data)
+        if request.form['submit'] == 'Submit' and form.validate():
+            # store data to file
+            print("Submit")
+            print(feature_list)
+            print(form.data)
+            with open(os.path.join(OUT_FOLDER, '{}-mappings.csv'.format(appname)), 'a') as csv_file:
+                for feature_num in feature_list:
+                    writer = csv.writer(csv_file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                    writer.writerow([form.data['feature_name_' + str(feature_num)],
+                                     form.data['feature_description_' + str(feature_num)],
+                                     form.data['feature_activity_' + str(feature_num)]])
+                csv_file.flush()
+            return redirect(url_for('after_questionaire', appname=appname))
 
-    return render_template('test.html', appname=appname, form=form,
-                           submitted_feature=submitted_feature, activities=activities)
+    return render_template('test.html', appname=appname, form=form, activities=activities,
+                           features_list=feature_list)
 
 
 # Post-test questionaire
@@ -79,7 +111,6 @@ def after_questionaire(appname):
     # error handling: wrong url access
     if not activity_file_exists(appname):
         return handle_app_not_exists(appname)
-
     return render_template('after_test.html')
 
 

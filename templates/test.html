@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %} A few remarks {% endblock %}
+{% block title %} Mapping {% endblock %}
 {% block content %}
 <div id="test-title-container" class="row">
     <div id="test-title" class="col-lg-10 col-md-offset-1">
@@ -12,36 +12,41 @@
         <p>
         Please define the features-activities mapping for app ''{{ appname }}''.
         </p>
-        {% if submitted_feature %}
-        <p id="submit_feedback">
-            Mapping for feature ''{{ submitted_feature }}'' saved!
-        </p>
-        {% endif %}
 
         {% from "_formhelper.html" import render_field %}
+        {% from "_formhelper.html" import render_table_field %}
         <form method=post>
-            <dl>
-                <div id="test-form-row-one" class="row">
-                    <div id="test-form-row-one-left" class="col-lg-6">
-                        {{ render_field(form.feature_name) }}
-                    </div>
-                    <div id="test-form-row-one-right" class="col-lg-6">
-                        {{ render_field(form.feature_description) }}
-                    </div>
-                </div>
-                <div id="test-form-row-two" class="row">
-                    <div id="test-form-row-two-left" class="col-lg-6">
-                        {{ render_field(form.activities) }}
-                    </div>
-                    <div id="test-form-row-two-right" class="col-lg-6">
-                        <input type="submit" value="Submit" class="btn btn-primary btn-block">
-                    </div>
-                </div>
-            </dl>
+            <table class="table table-sm table-responsive">
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-center"></th>
+                        <th scope="col" class="text-center">Feature Name</th>
+                        <th scope="col" class="text-center">Brief Description</th>
+                        {% for activity in activities %}
+                            <th scope="col" class="text-center small_font">{{ activity[0] }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    {% for feature in features_list %}
+                        <tr>
+                            <td><input type="submit" name="submit" value="Delete row {{loop.index}}" class="btn btn-primary btn-sm"></td>
+                            <td>{{ render_field(form['feature_name_' ~ feature], label_visible=False) }}</td>
+                            <td>{{ render_field(form['feature_description_' ~ feature], label_visible=False, class=" form-control table-description") }}</td>
+                            {{ render_table_field(form['feature_activity_' ~ feature], label_visible=False) }}
+                        </tr>
+                    {% endfor %}
+                    <td></td>
+                    <td>
+                        <input type="submit" name="submit" value="Add new row" class="btn btn-primary btn-block">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <input type="submit" name="submit" value="Submit" class="btn btn-primary btn-block">
         </form>
     </div>
-</div>
-<div id="button-end-test-container" class="row">
-    <a type="button" class="confirm btn btn-primary btn-block" href="/after-test/{{appname}}">Finish test</a>
 </div>
 {% endblock %}

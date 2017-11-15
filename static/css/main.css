@@ -46,3 +46,46 @@ ul {
     overflow-y: scroll;
     height: 200px;
 }
+
+.small_font {
+    font-size: 0.7em;
+}
+
+.rotate {
+    transform: rotate(315deg);
+}
+
+.table th {
+    border-bottom: black solid 1px !important;
+}
+
+.table td {
+    text-align: center;
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+.table td textarea{
+    padding-top: 1px;
+    padding-bottom: 1px;
+    margin-top: 2px;
+}
+
+.table td input{
+    padding-top: 1px;
+    padding-bottom: 1px;
+    margin-top: 2px;
+}
+
+#feature_name {
+    width: 200px;
+}
+
+.table-description {
+    width: 150px;
+    height: 28px;
+}
+
+.form-group {
+    margin: 0px;
+}

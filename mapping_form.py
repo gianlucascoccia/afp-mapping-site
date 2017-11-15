@@ -1,14 +1,26 @@
-from wtforms import Form, TextField, TextAreaField, SubmitField, validators, ValidationError
+from wtforms import Form, TextField, TextAreaField, SubmitField, validators, ValidationError, StringField
 from multi_checkbox import MultiCheckboxField
 
 
 class MappingForm(Form):
-    feature_name = TextField("Feature name", [validators.DataRequired()])
-    feature_description = TextAreaField("Brief feature description", [validators.DataRequired()])
-    activities = MultiCheckboxField('App activities', choices=[])
     submit = SubmitField("Submit")
 
-    def validate_activities(self, field):
-        if len(field.data) == 0:
-            raise ValidationError('Must select at least one activity')
+    # Utility function to add build form dinamically
+    @staticmethod
+    def build_mapping_form_dinamically(features_list, activities):
+        if features_list:
+            for index, feature in enumerate(features_list):
+                setattr(MappingForm, "feature_name_" + str(feature),
+                        StringField("Feature name", [validators.DataRequired()]))
+                setattr(MappingForm, "feature_description_" + str(feature),
+                        TextAreaField("Brief feature description", [validators.DataRequired()]))
+                setattr(MappingForm, "feature_activity_" + str(feature),
+                        MultiCheckboxField('App activities', [
+                            validators.DataRequired(message='Feature in row {} must be mapped with at least one activity!'
+                                                    .format(index + 1))], choices=activities))
 
+    @staticmethod
+    def delete_form_field_dinamically(feature_id):
+        delattr(MappingForm, "feature_name_" + str(feature_id))
+        delattr(MappingForm, "feature_description_" + str(feature_id))
+        delattr(MappingForm, "feature_activity_" + str(feature_id))

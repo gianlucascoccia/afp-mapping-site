@@ -21,6 +21,9 @@ else:
     # Sets activities list folder
     APPS_FOLDER = "/home/Fragoel2/afp-mapping-site/apps"
     OUT_FOLDER = "/home/Fragoel2/afp-mapping-site/out"
+    global feature_count, feature_list
+    feature_list = []
+    feature_count = 1
 
 
 # Default route
@@ -55,9 +58,7 @@ def test(appname):
 
     # First access to page
     if request.method == 'GET':
-        global feature_list, feature_count
-        feature_count = 0
-        feature_list = [feature_count]
+        reset_globals()
 
     # Handle case in which we need to add a field to form
     if request.method == 'POST' and request.form['submit'] == 'Add new row':

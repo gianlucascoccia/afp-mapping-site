@@ -59,7 +59,7 @@ def test(appname):
 
     # Handle case in which we need to add a field to form
     if request.method == 'POST' and request.form['submit'] == 'Add new row':
-        global feature_count
+        global feature_count, feature_list
         feature_count += 1
         feature_list.append(feature_count)
 

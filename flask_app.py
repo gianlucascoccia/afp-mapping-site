@@ -1,12 +1,10 @@
 import os.path
 import csv
-import datetime
+import time
 from flask import Flask, render_template, request, url_for
 from werkzeug.utils import redirect
-from wtforms import StringField, validators, TextAreaField
 from contact_form import ContactForm
 from mapping_form import MappingForm
-from multi_checkbox import MultiCheckboxField
 
 app = Flask(__name__)
 feature_list = []
@@ -35,6 +33,7 @@ def default():
 @app.route('/before-test/<appname>', methods=['GET', 'POST'])
 def before_explanation(appname):
     # error handling: wrong url access
+    reset_globals()
     if not activity_file_exists(appname):
         return handle_app_not_exists(appname)
     return render_template('before_test.html', appname=appname)
@@ -56,19 +55,13 @@ def test(appname):
 
     # First access to page
     if request.method == 'GET':
-        global feature_list
-        global feature_count
-        feature_count = 0
-        feature_list = [feature_count]
+        reset_globals()
 
     # Handle case in which we need to add a field to form
     if request.method == 'POST' and request.form['submit'] == 'Add new row':
         global feature_count
         feature_count += 1
         feature_list.append(feature_count)
-        print("Addition")
-        print(feature_count)
-        print(feature_list)
 
     # Handle case in which we need to remove a field to form
     if request.method == 'POST' and request.form['submit'].startswith('Delete row '):
@@ -76,9 +69,6 @@ def test(appname):
         global feature_list
         feature_list.pop(removal_id)
         MappingForm.delete_form_field_dinamically(removal_id)
-        print("Removal")
-        print(removal_id)
-        print(feature_list)
 
     # build form dynamically
     MappingForm.build_mapping_form_dinamically(feature_list, activities)
@@ -86,18 +76,21 @@ def test(appname):
 
     # Handle cases in which form was submitted
     if request.method == 'POST':
-        print(form.data)
         if request.form['submit'] == 'Submit' and form.validate():
-            # store data to file
-            print("Submit")
-            print(feature_list)
-            print(form.data)
+            # save the submit timestamp
+            with open(os.path.join(OUT_FOLDER, '{}-timestamps.csv'.format(appname)), 'a') as csv_file:
+                writer = csv.writer(csv_file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                writer.writerow(['FormSubmit', time.time()])
+                csv_file.flush()
+            # store form data to file
             with open(os.path.join(OUT_FOLDER, '{}-mappings.csv'.format(appname)), 'a') as csv_file:
                 for feature_num in feature_list:
                     writer = csv.writer(csv_file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-                    writer.writerow([form.data['feature_name_' + str(feature_num)],
-                                     form.data['feature_description_' + str(feature_num)],
-                                     form.data['feature_activity_' + str(feature_num)]])
+                    writer.writerow([
+                                    form.data['feature_name_' + str(feature_num)],
+                                    form.data['feature_description_' + str(feature_num)],
+                                    form.data['feature_activity_' + str(feature_num)]
+                                    ])
                 csv_file.flush()
             return redirect(url_for('after_questionaire', appname=appname))
 
@@ -109,9 +102,21 @@ def test(appname):
 @app.route('/after-test/<appname>', methods=['GET', 'POST'])
 def after_questionaire(appname):
     # error handling: wrong url access
+    reset_globals()
     if not activity_file_exists(appname):
         return handle_app_not_exists(appname)
     return render_template('after_test.html')
+
+
+@app.route('/store-ts/<appname>')
+def store_timestamp(appname):
+    timestamp = request.args.get('timestamp', 0, int)
+    clicked = request.args.get('clicked', 'Null', str)
+    with open(os.path.join(OUT_FOLDER, '{}-timestamps.csv'.format(appname)), 'a') as csv_file:
+        writer = csv.writer(csv_file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        writer.writerow([clicked, timestamp])
+        csv_file.flush()
+    return '', 204
 
 
 # Page not found route
@@ -145,3 +150,10 @@ def handle_error_submit(form):
         writer.writerow([name, email, message])
         csv_file.flush()
     return render_template('message_sent.html', name=name)
+
+
+# Utility function to reset global variables
+def reset_globals():
+    global feature_list, feature_count
+    feature_count = 0
+    feature_list = [feature_count]

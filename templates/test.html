@@ -1,5 +1,8 @@
 {% extends "layout.html" %}
 {% block title %} Mapping {% endblock %}
+{% block additionalscripts %}
+    <script src="{{url_for('static', filename='js/timestamps.js')}}"></script>
+{% endblock %}
 {% block content %}
 <div id="test-title-container" class="row">
     <div id="test-title" class="col-lg-10 col-md-offset-1">
@@ -8,11 +11,11 @@
 </div>
 <div id="test-body-container" class="row">
     <div id="test-body" class="col-lg-12">
+        <input type="hidden" value="{{appname}}" id="appname">
         <br>
         <p>
         Please define the features-activities mapping for app ''{{ appname }}''.
         </p>
-
         {% from "_formhelper.html" import render_field %}
         {% from "_formhelper.html" import render_table_field %}
         <form method=post>
@@ -34,7 +37,7 @@
                             <td><input type="submit" name="submit" value="Delete row {{loop.index}}" class="btn btn-primary btn-sm"></td>
                             <td>{{ render_field(form['feature_name_' ~ feature], label_visible=False) }}</td>
                             <td>{{ render_field(form['feature_description_' ~ feature], label_visible=False, class=" form-control table-description") }}</td>
-                            {{ render_table_field(form['feature_activity_' ~ feature], label_visible=False) }}
+                            {{ render_table_field(form['feature_activity_' ~ feature], feature, label_visible=False) }}
                         </tr>
                     {% endfor %}
                     <td></td>
@@ -45,7 +48,7 @@
                 </tbody>
             </table>
 
-            <input type="submit" name="submit" value="Submit" class="btn btn-primary btn-block">
+            <input type="submit" name="submit" value="Submit" href="/test/{{appname}}" class="btn btn-primary btn-block">
         </form>
     </div>
 </div>

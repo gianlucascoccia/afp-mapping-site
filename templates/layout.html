@@ -10,6 +10,11 @@
     <link rel="stylesheet"  type= "text/css" href= "{{url_for('static',filename='css/bootstrap.min.css')}}">
     <link rel="stylesheet"  type= "text/css" href= "{{url_for('static',filename='css/main.css')}}">
 
+    <script src="{{url_for('static', filename='js/jquery-3.2.1.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/popper.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+    <!--<script src="{{url_for('static', filename='js/confirm.js')}}"></script>-->
+    {% block additionalscripts %}{% endblock %}
   </head>
   <body>
     <div id="content" class="container my-3">
@@ -17,19 +22,6 @@
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="{{url_for('static', filename='js/jquery-3.2.1.slim.min.js')}}"></script>
-    <script src="{{url_for('static', filename='js/popper.min.js')}}"></script>
-    <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
-    <script>
-    $(function() {
-      $('.confirm').click(function(e) {
-        e.preventDefault();
-          if (window.confirm("Are you sure you want to proceed? You won't be able to go back")) {
-            location.href = this.href;
-          }
-        });
-    });
-</script>
     <div id="footer">
     </div>
   </body>

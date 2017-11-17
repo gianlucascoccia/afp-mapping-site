@@ -15,11 +15,11 @@
     </div>
 {%- endmacro %}
 
-{% macro render_table_field(field, feature_num) -%}
-{{ field(class_='form-control', **kwargs) }}
-    {% if field.errors %}
-        {% for e in field.errors %}
-            <p class="help-block">{{ e }}</p>
+{% macro render_table_field(field, feature) -%}
+{{ field(class_="timestamp", data_row=feature, **kwargs) }}
+{% if field.errors %}
+    {% for e in field.errors %}
+        <p class="help-block">{{ e }}</p>
     {% endfor %}
 {% endif %}
 {%- endmacro %}

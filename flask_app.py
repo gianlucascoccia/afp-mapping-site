@@ -72,7 +72,6 @@ def test(appname):
         if request.form['submit'].startswith('Delete row '):
             removal_id = int(request.form['submit'][-1])
             feature_list.pop(removal_id - 1)
-            print(feature_list)
             MappingForm.delete_form_field_dinamically(removal_id)
 
     # build form dynamically

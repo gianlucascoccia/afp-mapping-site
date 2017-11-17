@@ -21,9 +21,6 @@ else:
     # Sets activities list folder
     APPS_FOLDER = "/home/Fragoel2/afp-mapping-site/apps"
     OUT_FOLDER = "/home/Fragoel2/afp-mapping-site/out"
-    global feature_count, feature_list
-    feature_list = []
-    feature_count = 1
 
 
 # Default route

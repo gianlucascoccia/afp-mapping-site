@@ -55,7 +55,9 @@ def test(appname):
 
     # First access to page
     if request.method == 'GET':
-        reset_globals()
+        global feature_list, feature_count
+        feature_count = 0
+        feature_list = [feature_count]
 
     # Handle case in which we need to add a field to form
     if request.method == 'POST' and request.form['submit'] == 'Add new row':

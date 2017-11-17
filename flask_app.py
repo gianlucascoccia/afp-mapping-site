@@ -66,7 +66,7 @@ def test(appname):
     # Handle case in which we need to remove a field to form
     if request.method == 'POST' and request.form['submit'].startswith('Delete row '):
         removal_id = int(request.form['submit'][-1]) - 1
-        global feature_list
+        global feature_count, feature_list
         feature_list.pop(removal_id)
         MappingForm.delete_form_field_dinamically(removal_id)
 

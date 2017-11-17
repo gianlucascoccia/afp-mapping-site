@@ -8,8 +8,10 @@ class MappingForm(Form):
     # Utility function to add build form dinamically
     @staticmethod
     def build_mapping_form_dinamically(features_list, activities):
+        print(features_list)
         if features_list:
             for index, feature in enumerate(features_list):
+                print("ADD " + str(feature))
                 setattr(MappingForm, "feature_name_" + str(feature),
                         StringField("Feature name", [validators.DataRequired()]))
                 setattr(MappingForm, "feature_description_" + str(feature),
@@ -21,6 +23,10 @@ class MappingForm(Form):
 
     @staticmethod
     def delete_form_field_dinamically(feature_id):
-        delattr(MappingForm, "feature_name_" + str(feature_id))
-        delattr(MappingForm, "feature_description_" + str(feature_id))
-        delattr(MappingForm, "feature_activity_" + str(feature_id))
+        try:
+            print("DEL " + str(feature_id))
+            delattr(MappingForm, "feature_name_" + str(feature_id))
+            delattr(MappingForm, "feature_description_" + str(feature_id))
+            delattr(MappingForm, "feature_activity_" + str(feature_id))
+        except AttributeError:
+            print("DEL ERROR")

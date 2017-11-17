@@ -7,8 +7,6 @@ from contact_form import ContactForm
 from mapping_form import MappingForm
 
 app = Flask(__name__)
-feature_list = []
-feature_count = 1
 
 # Set some variables according to whether we are on production or development
 if app.config['DEBUG']:
@@ -33,7 +31,6 @@ def default():
 @app.route('/before-test/<appname>', methods=['GET', 'POST'])
 def before_explanation(appname):
     # error handling: wrong url access
-    reset_globals()
     if not activity_file_exists(appname):
         return handle_app_not_exists(appname)
     return render_template('before_test.html', appname=appname)
@@ -55,20 +52,28 @@ def test(appname):
 
     # First access to page
     if request.method == 'GET':
-        reset_globals()
+        feature_count = 1
+        feature_list = [feature_count]
 
-    # Handle case in which we need to add a field to form
-    if request.method == 'POST' and request.form['submit'] == 'Add new row':
-        global feature_count, feature_list
-        feature_count += 1
-        feature_list.append(feature_count)
+    if request.method == 'POST':
+        if len(request.form['features']) > 2:
+            feature_list = list(map(int, request.form['features'][1:-1].split(',')))
+            feature_count = max(feature_list)
+        else:
+            feature_count = 0
+            feature_list = []
 
-    # Handle case in which we need to remove a field to form
-    if request.method == 'POST' and request.form['submit'].startswith('Delete row '):
-        removal_id = int(request.form['submit'][-1]) - 1
-        global feature_count, feature_list
-        feature_list.pop(removal_id)
-        MappingForm.delete_form_field_dinamically(removal_id)
+        # Handle case in which we need to add a field to form
+        if request.form['submit'] == 'Add new row':
+            feature_count += 1
+            feature_list.append(feature_count)
+
+        # Handle case in which we need to remove a field to form
+        if request.form['submit'].startswith('Delete row '):
+            removal_id = int(request.form['submit'][-1])
+            feature_list.pop(removal_id - 1)
+            print(feature_list)
+            MappingForm.delete_form_field_dinamically(removal_id)
 
     # build form dynamically
     MappingForm.build_mapping_form_dinamically(feature_list, activities)
@@ -102,7 +107,6 @@ def test(appname):
 @app.route('/after-test/<appname>', methods=['GET', 'POST'])
 def after_questionaire(appname):
     # error handling: wrong url access
-    reset_globals()
     if not activity_file_exists(appname):
         return handle_app_not_exists(appname)
     return render_template('after_test.html')
@@ -150,10 +154,3 @@ def handle_error_submit(form):
         writer.writerow([name, email, message])
         csv_file.flush()
     return render_template('message_sent.html', name=name)
-
-
-# Utility function to reset global variables
-def reset_globals():
-    global feature_list, feature_count
-    feature_count = 0
-    feature_list = [feature_count]

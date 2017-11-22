@@ -70,13 +70,15 @@ def test(appname):
 
         # Handle case in which we need to remove a field to form
         if request.form['submitValue'].startswith('del'):
-            removal_id = int(request.form['submitValue'][4:])
-            feature_list.pop(removal_id - 1)
-            MappingForm.delete_form_field_dinamically(removal_id)
+            element_to_remove = int(request.form['submitValue'][4:])
+            print("removal id" + str(element_to_remove))
+            feature_list.pop(feature_list.index(element_to_remove))
+            MappingForm.delete_form_field_dinamically(element_to_remove)
 
     # build form dynamically
     MappingForm.build_mapping_form_dinamically(feature_list, activities)
     form = MappingForm(request.form)
+    print(feature_list)
 
     # Handle cases in which form was submitted
     if request.method == 'POST':

@@ -36,7 +36,7 @@
                 <tr>
                     {% for feature in features_list %}
                         <tr>
-                            <td><input type="submit" value="X" class="btn btn-danger btn-sm confirm delete" data-action="del_{{loop.index}}"></td>
+                            <td><input type="submit" value="X" class="btn btn-danger btn-sm confirm delete" data-action="del_{{feature}}"></td>
                             <td>{{ render_field(form['feature_name_' ~ feature], label_visible=False) }}</td>
                             <td>{{ render_field(form['feature_description_' ~ feature], label_visible=False, class=" form-control table-description") }}</td>
                             {{ render_table_field(form['feature_activity_' ~ feature], feature, label_visible=False) }}

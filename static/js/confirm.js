@@ -1,9 +1,11 @@
 $(function() {
-      var href = $('.confirm').attr('href');
+      var form = $('#mapping-form');
       $('.confirm').click(function(e) {
         e.preventDefault();
-          if (window.confirm("Are you sure you want to proceed? You won't be able to go back")) {
-            location.href = href;
+        value = $(this).data("action");
+          if (window.confirm("Are you sure?")) {
+            form.append("<input type='hidden' name='submitValue' value='" + value + "' />");
+            form.submit();
           }
         });
     });

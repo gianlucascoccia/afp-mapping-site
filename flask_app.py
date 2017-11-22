@@ -64,13 +64,13 @@ def test(appname):
             feature_list = []
 
         # Handle case in which we need to add a field to form
-        if request.form['submit'] == 'Add new row':
+        if request.form['submitValue'] == 'add':
             feature_count += 1
             feature_list.append(feature_count)
 
         # Handle case in which we need to remove a field to form
-        if request.form['submit'].startswith('Delete row '):
-            removal_id = int(request.form['submit'][-1])
+        if request.form['submitValue'].startswith('del'):
+            removal_id = int(request.form['submitValue'][4:])
             feature_list.pop(removal_id - 1)
             MappingForm.delete_form_field_dinamically(removal_id)
 
@@ -80,7 +80,7 @@ def test(appname):
 
     # Handle cases in which form was submitted
     if request.method == 'POST':
-        if request.form['submit'] == 'Submit' and form.validate():
+        if request.form['submitValue'] == 'submit' and form.validate():
             # save the submit timestamp
             with open(os.path.join(OUT_FOLDER, '{}-timestamps.csv'.format(appname)), 'a') as csv_file:
                 writer = csv.writer(csv_file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)

@@ -10,11 +10,10 @@ class MappingForm(Form):
     def build_mapping_form_dinamically(features_list, activities):
         if features_list:
             for index, feature in enumerate(features_list):
-                print("ADD " + str(feature))
                 setattr(MappingForm, "feature_name_" + str(feature),
                         StringField("Feature name", [validators.DataRequired()]))
                 setattr(MappingForm, "feature_description_" + str(feature),
-                        TextAreaField("Brief feature description", [validators.DataRequired()]))
+                        TextAreaField("Brief feature description"))
                 setattr(MappingForm, "feature_activity_" + str(feature),
                         MultiCheckboxField('App activities', [
                             validators.DataRequired(message='Feature in row {} must be mapped with at least one activity!'

@@ -2,6 +2,8 @@
 {% block title %} Mapping {% endblock %}
 {% block additionalscripts %}
     <script src="{{url_for('static', filename='js/timestamps.js')}}"></script>
+    <script src="{{url_for('static', filename='js/confirm.js')}}"></script>
+    <script src="{{url_for('static', filename='js/submit.js')}}"></script>
 {% endblock %}
 {% block content %}
 <div id="test-title-container" class="row">
@@ -18,7 +20,7 @@
         </p>
         {% from "_formhelper.html" import render_field %}
         {% from "_formhelper.html" import render_table_field %}
-        <form method=post>
+        <form method=post id="mapping-form">
             <table class="table table-sm table-responsive">
                 <thead>
                     <tr>
@@ -34,7 +36,7 @@
                 <tr>
                     {% for feature in features_list %}
                         <tr>
-                            <td><input type="submit" name="submit" value="Delete row {{loop.index}}" class="btn btn-primary btn-sm"></td>
+                            <td><input type="submit" value="X" class="btn btn-danger btn-sm confirm delete" data-action="del_{{loop.index}}"></td>
                             <td>{{ render_field(form['feature_name_' ~ feature], label_visible=False) }}</td>
                             <td>{{ render_field(form['feature_description_' ~ feature], label_visible=False, class=" form-control table-description") }}</td>
                             {{ render_table_field(form['feature_activity_' ~ feature], feature, label_visible=False) }}
@@ -42,13 +44,13 @@
                     {% endfor %}
                     <td></td>
                     <td>
-                        <input type="submit" name="submit" value="Add new row" class="btn btn-primary btn-block">
+                        <input type="submit" value="Add new row" class="btn btn-primary btn-block submit" data-action="add">
                     </td>
                 </tr>
                 </tbody>
             </table>
             <input type="hidden" value="{{features_list}}" name="features">
-            <input type="submit" name="submit" value="Submit" href="/test/{{appname}}" class="btn btn-primary btn-block">
+            <input id="submitButton" type="submit" value="Submit" class="btn btn-primary btn-block confirm" data-action="submit">
         </form>
     </div>
 </div>

@@ -17,6 +17,19 @@
     {% block additionalscripts %}{% endblock %}
   </head>
   <body>
+    <header class="container my-3">
+      <div class="row">
+        <div class="logo col-lg-4">
+          <img src="{{url_for('static', filename='img/logo-gssi-new.png')}}">
+        </div>
+        <div class="logo col-lg-4">
+          <img src="{{url_for('static', filename='img/logo-univaq.png')}}">
+        </div>
+        <div class="logo col-lg-4">
+          <img src="{{url_for('static', filename='img/logo-vu.png')}}">
+        </div>
+      </div>
+    </header>
     <div id="content" class="container my-3">
       {% block content %}{% endblock %}
     </div>

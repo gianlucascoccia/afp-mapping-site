@@ -1,5 +1,5 @@
 body {
-    background-color: #EAF0F6;
+    background-color: #FFFFFF;
     }
 
 h1, h2, h3, h4, h5 {
@@ -88,4 +88,15 @@ ul {
 
 .form-group {
     margin: 0px;
+}
+
+.logo img {
+    max-width: 400px;
+    max-height: 203px;
+}
+
+.delete {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    font-weight: bold;
 }

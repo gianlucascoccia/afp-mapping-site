@@ -2,12 +2,11 @@ import importlib
 import os.path
 import csv
 import time
+import mapping_form
 from flask import Flask, render_template, request, url_for
 from werkzeug.utils import redirect
 from contact_form import ContactForm
-import mapping_form
 
-d = {}
 app = Flask(__name__)
 
 # Set some variables according to whether we are on production or development
@@ -75,33 +74,34 @@ def test(appname):
         if request.form['submitValue'].startswith('del'):
             element_to_remove = int(request.form['submitValue'][4:])
             feature_list.pop(feature_list.index(element_to_remove))
-            form_class = d.get(appname)
-            form_class.delete_form_field_dinamically(element_to_remove)
+            mapping_form.MappingForm.delete_form_field_dinamically(element_to_remove)
+
+        # Handle cases in which form was submitted
+        if request.form['submitValue'] == 'submit':
+            importlib.reload(mapping_form)
+            mapping_form.MappingForm.build_mapping_form_dinamically(feature_list, activities)
+            form = mapping_form.MappingForm(request.form)
+            if form.validate():
+                # save the submit timestamp
+                with open(os.path.join(OUT_FOLDER, '{}-timestamps.csv'.format(appname)), 'a') as csv_file:
+                    writer = csv.writer(csv_file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                    writer.writerow(['FormSubmit', time.time()])
+                    csv_file.flush()
+                # store form data to file
+                with open(os.path.join(OUT_FOLDER, '{}-mappings.csv'.format(appname)), 'a') as csv_file:
+                    for feature_num in feature_list:
+                        writer = csv.writer(csv_file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                        writer.writerow([
+                            form.data['feature_name_' + str(feature_num)],
+                            form.data['feature_description_' + str(feature_num)],
+                            form.data['feature_activity_' + str(feature_num)]
+                        ])
+                    csv_file.flush()
+                return redirect(url_for('after_questionaire', appname=appname))
 
     # build form dynamically
-    form_class = mapping_form.MappingForm.build_mapping_form_dinamically(feature_list, activities)
-    d.update({appname: form_class})
+    mapping_form.MappingForm.build_mapping_form_dinamically(feature_list, activities)
     form = mapping_form.MappingForm(request.form)
-
-    # Handle cases in which form was submitted
-    if request.method == 'POST':
-        if request.form['submitValue'] == 'submit' and form.validate():
-            # save the submit timestamp
-            with open(os.path.join(OUT_FOLDER, '{}-timestamps.csv'.format(appname)), 'a') as csv_file:
-                writer = csv.writer(csv_file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-                writer.writerow(['FormSubmit', time.time()])
-                csv_file.flush()
-            # store form data to file
-            with open(os.path.join(OUT_FOLDER, '{}-mappings.csv'.format(appname)), 'a') as csv_file:
-                for feature_num in feature_list:
-                    writer = csv.writer(csv_file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-                    writer.writerow([
-                                    form.data['feature_name_' + str(feature_num)],
-                                    form.data['feature_description_' + str(feature_num)],
-                                    form.data['feature_activity_' + str(feature_num)]
-                                    ])
-                csv_file.flush()
-            return redirect(url_for('after_questionaire', appname=appname))
 
     return render_template('test.html', appname=appname, form=form, activities=activities,
                            features_list=feature_list)

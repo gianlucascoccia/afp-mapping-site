@@ -22,9 +22,9 @@ class MappingForm(Form):
     @staticmethod
     def delete_form_field_dinamically(feature_id):
         try:
-            print(feature_id)
+            print("FIELD TO REMOVE: " + str(feature_id))
             delattr(MappingForm, "feature_name_" + str(feature_id))
             delattr(MappingForm, "feature_description_" + str(feature_id))
             delattr(MappingForm, "feature_activity_" + str(feature_id))
         except AttributeError:
-            print("DEL ERROR")
+            print("DEL ERROR FOR " + str(feature_id))

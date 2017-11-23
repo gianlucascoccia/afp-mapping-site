@@ -1,10 +1,11 @@
+import importlib
 import os.path
 import csv
 import time
 from flask import Flask, render_template, request, url_for
 from werkzeug.utils import redirect
 from contact_form import ContactForm
-from mapping_form import MappingForm
+import mapping_form
 
 app = Flask(__name__)
 
@@ -54,6 +55,7 @@ def test(appname):
     if request.method == 'GET':
         feature_count = 1
         feature_list = [feature_count]
+        importlib.reload(mapping_form)
 
     if request.method == 'POST':
         if len(request.form['features']) > 2:
@@ -71,14 +73,12 @@ def test(appname):
         # Handle case in which we need to remove a field to form
         if request.form['submitValue'].startswith('del'):
             element_to_remove = int(request.form['submitValue'][4:])
-            print("removal id" + str(element_to_remove))
             feature_list.pop(feature_list.index(element_to_remove))
-            MappingForm.delete_form_field_dinamically(element_to_remove)
+            mapping_form.MappingForm.delete_form_field_dinamically(element_to_remove)
 
     # build form dynamically
-    MappingForm.build_mapping_form_dinamically(feature_list, activities)
-    form = MappingForm(request.form)
-    print(feature_list)
+    mapping_form.MappingForm.build_mapping_form_dinamically(feature_list, activities)
+    form = mapping_form.MappingForm(request.form)
 
     # Handle cases in which form was submitted
     if request.method == 'POST':

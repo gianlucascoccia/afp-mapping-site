@@ -7,6 +7,7 @@ from werkzeug.utils import redirect
 from contact_form import ContactForm
 import mapping_form
 
+d = {}
 app = Flask(__name__)
 
 # Set some variables according to whether we are on production or development
@@ -74,10 +75,12 @@ def test(appname):
         if request.form['submitValue'].startswith('del'):
             element_to_remove = int(request.form['submitValue'][4:])
             feature_list.pop(feature_list.index(element_to_remove))
-            mapping_form.MappingForm.delete_form_field_dinamically(element_to_remove)
+            form_class = d.get(appname)
+            form_class.delete_form_field_dinamically(element_to_remove)
 
     # build form dynamically
-    mapping_form.MappingForm.build_mapping_form_dinamically(feature_list, activities)
+    form_class = mapping_form.MappingForm.build_mapping_form_dinamically(feature_list, activities)
+    d.update({appname: form_class})
     form = mapping_form.MappingForm(request.form)
 
     # Handle cases in which form was submitted

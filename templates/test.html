@@ -20,10 +20,11 @@
         </p>
         {% from "_formhelper.html" import render_field %}
         {% from "_formhelper.html" import render_table_field %}
-        <div class="outer">
-            <div class="inner">
+
                 <form method=post id="mapping-form">
-                    <table class="table table-sm table-responsive table-condensed">
+                    <div class="outer">
+            <div class="inner">
+                    <table class="table table-sm table-condensed">
                         <thead>
                             <tr>
                                 <th scope="col" class="text-center hard-left small_font">&nbsp;</th>
@@ -52,10 +53,11 @@
                         </tbody>
                     </table>
                     <input type="hidden" value="{{features_list}}" name="features">
-                    <input id="submitButton" type="submit" value="Submit" class="btn btn-primary btn-block confirm" data-action="submit">
-                </form>
+
             </div>
+                    <input id="submitButton" type="submit" value="Submit" class="btn btn-primary btn-block confirm submit-button" data-action="submit">
         </div>
+                </form>
     </div>
 </div>
 {% endblock %}

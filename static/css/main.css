@@ -58,7 +58,7 @@ ul {
 .table td {
     text-align: center;
     padding-top: 1px;
-    height: 35px;
+    height: 45px;
 }
 
 .table td textarea{
@@ -131,8 +131,16 @@ ul {
 }
 
 .inner {
-  overflow-x:scroll;
-  overflow-y:visible;
-  width:800px;
-  margin-left:392px;
+  overflow-x: scroll;
+  overflow-y: visible;
+  width: 710px;
+  margin-left: 400px;
+}
+
+.submit-button{
+    margin-top: 25px;
+}
+
+table td .help-block {
+    font-size: 9px;
 }

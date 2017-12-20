@@ -81,7 +81,10 @@ def test(appname):
             importlib.reload(mapping_form)
             mapping_form.MappingForm.build_mapping_form_dinamically(feature_list, activities)
             form = mapping_form.MappingForm(request.form)
-            if form.validate():
+            if not form.validate():
+                return render_template('test.html', appname=appname, form=form, activities=activities,
+                                       features_list=feature_list)
+            else:
                 # save the submit timestamp
                 with open(os.path.join(OUT_FOLDER, '{}-timestamps.csv'.format(appname)), 'a') as csv_file:
                     writer = csv.writer(csv_file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
@@ -103,6 +106,7 @@ def test(appname):
     mapping_form.MappingForm.build_mapping_form_dinamically(feature_list, activities)
     form = mapping_form.MappingForm(request.form)
 
+    print("OLLO")
     return render_template('test.html', appname=appname, form=form, activities=activities,
                            features_list=feature_list)
 

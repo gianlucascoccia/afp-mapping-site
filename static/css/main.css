@@ -55,14 +55,10 @@ ul {
     transform: rotate(315deg);
 }
 
-.table th {
-    border-bottom: black solid 1px !important;
-}
-
 .table td {
     text-align: center;
     padding-top: 1px;
-    padding-bottom: 1px;
+    height: 35px;
 }
 
 .table td textarea{
@@ -72,9 +68,9 @@ ul {
 }
 
 .table td input{
-    padding-top: 1px;
-    padding-bottom: 1px;
-    margin-top: 2px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-top: 0px;
 }
 
 #feature_name {
@@ -99,4 +95,44 @@ ul {
     background-color: #dc3545 !important;
     border-color: #dc3545 !important;
     font-weight: bold;
+}
+
+.hard-left {
+  position:absolute;
+  *position: relative; /*ie7*/
+  left:0;
+  width:150px;
+}
+
+.hard-left input {
+    margin-top: 3px !important;
+}
+
+.next-left {
+  position:absolute;
+  *position: relative; /*ie7*/
+  left:150px;
+  width:100px;
+}
+
+.next-left input {
+    margin-top: 3px !important;
+}
+
+.next-next-left {
+  position:absolute;
+  *position: relative; /*ie7*/
+  left:250px;
+  width:150px;
+}
+
+.outer {
+    position:relative
+}
+
+.inner {
+  overflow-x:scroll;
+  overflow-y:visible;
+  width:800px;
+  margin-left:392px;
 }

@@ -20,38 +20,42 @@
         </p>
         {% from "_formhelper.html" import render_field %}
         {% from "_formhelper.html" import render_table_field %}
-        <form method=post id="mapping-form">
-            <table class="table table-sm table-responsive">
-                <thead>
-                    <tr>
-                        <th scope="col" class="text-center"></th>
-                        <th scope="col" class="text-center">Feature Name</th>
-                        <th scope="col" class="text-center">Brief Description</th>
-                        {% for activity in activities %}
-                            <th scope="col" class="text-center small_font">{{ activity[0] }}</th>
-                        {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    {% for feature in features_list %}
+        <div class="outer">
+            <div class="inner">
+                <form method=post id="mapping-form">
+                    <table class="table table-sm table-responsive table-condensed">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="text-center hard-left small_font">&nbsp;</th>
+                                <th scope="col" class="text-center next-left small_font">Feature Name</th>
+                                <th scope="col" class="text-center next-next-left small_font">Brief Description</th>
+                                {% for activity in activities %}
+                                    <th scope="col" class="text-center small_font">{{ activity[0] }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
                         <tr>
-                            <td><input type="submit" value="X" class="btn btn-danger btn-sm confirm delete" data-action="del_{{feature}}"></td>
-                            <td>{{ render_field(form['feature_name_' ~ feature], label_visible=False) }}</td>
-                            <td>{{ render_field(form['feature_description_' ~ feature], label_visible=False, class=" form-control table-description") }}</td>
-                            {{ render_table_field(form['feature_activity_' ~ feature], feature, label_visible=False) }}
+                            {% for feature in features_list %}
+                                <tr>
+                                    <td class="hard-left"><input type="submit" value="X" class="btn btn-danger btn-sm confirm delete" data-action="del_{{feature}}"></td>
+                                    <td class="next-left">{{ render_field(form['feature_name_' ~ feature], label_visible=False) }}</td>
+                                    <td class="next-next-left">{{ render_field(form['feature_description_' ~ feature], label_visible=False, class=" form-control table-description") }}</td>
+                                    {{ render_table_field(form['feature_activity_' ~ feature], feature, label_visible=False) }}
+                                </tr>
+                            {% endfor %}
+                            <td></td>
+                            <td class="hard-left">
+                                <input type="submit" value="Add new row" class="btn btn-primary btn-block submit" data-action="add">
+                            </td>
                         </tr>
-                    {% endfor %}
-                    <td></td>
-                    <td>
-                        <input type="submit" value="Add new row" class="btn btn-primary btn-block submit" data-action="add">
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <input type="hidden" value="{{features_list}}" name="features">
-            <input id="submitButton" type="submit" value="Submit" class="btn btn-primary btn-block confirm" data-action="submit">
-        </form>
+                        </tbody>
+                    </table>
+                    <input type="hidden" value="{{features_list}}" name="features">
+                    <input id="submitButton" type="submit" value="Submit" class="btn btn-primary btn-block confirm" data-action="submit">
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -101,30 +101,32 @@ ul {
   position:absolute;
   *position: relative; /*ie7*/
   left:0;
-  width:150px;
+  width:32px;
 }
 
 .hard-left input {
     margin-top: 3px !important;
 }
 
+#mapping-form > div > div > table > thead > tr > th.text-center.hard-left.small_font {
+    padding-bottom: 3px !important;
+}
+
 .next-left {
   position:absolute;
   *position: relative; /*ie7*/
-  left:150px;
-  width:100px;
+  left:32px;
+  width:200px;
 }
 
 .next-left input {
     margin-top: 3px !important;
 }
 
-.next-next-left {
-  position:absolute;
-  *position: relative; /*ie7*/
-  left:250px;
-  width:150px;
+#mapping-form > div > div > table > thead > tr > th.text-center.next-left.small_font {
+    padding-bottom: 3px !important;
 }
+
 
 .outer {
     position:relative
@@ -133,8 +135,8 @@ ul {
 .inner {
   overflow-x: scroll;
   overflow-y: visible;
-  width: 710px;
-  margin-left: 400px;
+  min-width: 800px;
+  margin-left: 220px;
 }
 
 .submit-button{
@@ -143,4 +145,36 @@ ul {
 
 table td .help-block {
     font-size: 9px;
+}
+
+.inner::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.inner::-webkit-scrollbar:vertical {
+    width: 11px;
+}
+
+.inner::-webkit-scrollbar:horizontal {
+    height: 11px;
+}
+
+.inner::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    border: 2px solid white; /* should match background, can't be transparent */
+    background-color: rgba(0, 0, 0, .5);
+}
+
+.inner::-webkit-scrollbar-track {
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+.table-cell {
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    width: auto;
 }

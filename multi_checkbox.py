@@ -21,7 +21,7 @@ class TableColWidget(TableWidget):
             if subfield.type in ('HiddenField', 'CSRFTokenField'):
                 hidden += text_type(subfield)
             else:
-                html.append('<td %s >%s</td>' % (html_params(**kwargs), text_type(subfield)))
+                html.append('<td %s ><div class="table-cell">%s</span></td>' % (html_params(**kwargs), text_type(subfield)))
                 hidden = ''
         if hidden:
             html.append(hidden)

@@ -96,7 +96,6 @@ def test(appname):
                         writer = csv.writer(csv_file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
                         writer.writerow([
                             form.data['feature_name_' + str(feature_num)],
-                            form.data['feature_description_' + str(feature_num)],
                             form.data['feature_activity_' + str(feature_num)]
                         ])
                     csv_file.flush()
@@ -106,7 +105,6 @@ def test(appname):
     mapping_form.MappingForm.build_mapping_form_dinamically(feature_list, activities)
     form = mapping_form.MappingForm(request.form)
 
-    print("OLLO")
     return render_template('test.html', appname=appname, form=form, activities=activities,
                            features_list=feature_list)
 

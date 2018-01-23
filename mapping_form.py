@@ -12,8 +12,6 @@ class MappingForm(Form):
             for index, feature in enumerate(features_list):
                 setattr(MappingForm, "feature_name_" + str(feature),
                         StringField("Feature name", [validators.DataRequired()]))
-                setattr(MappingForm, "feature_description_" + str(feature),
-                        TextAreaField("Brief feature description"))
                 setattr(MappingForm, "feature_activity_" + str(feature),
                         MultiCheckboxField('App activities', [
                             validators.DataRequired(message='Feature in row {} must be mapped with at least one activity!'
@@ -24,7 +22,6 @@ class MappingForm(Form):
         try:
             print("FIELD TO REMOVE: " + str(feature_id))
             delattr(MappingForm, "feature_name_" + str(feature_id))
-            delattr(MappingForm, "feature_description_" + str(feature_id))
             delattr(MappingForm, "feature_activity_" + str(feature_id))
         except AttributeError:
             print("DEL ERROR FOR " + str(feature_id))

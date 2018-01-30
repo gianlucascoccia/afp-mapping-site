@@ -8,7 +8,7 @@
 {% block content %}
 <div id="test-title-container" class="row">
     <div id="test-title" class="col-lg-10 col-md-offset-1">
-        <h4>Test phase</h4>
+        <h4>Feature to Android activity mapping</h4>
     </div>
 </div>
 <div id="test-body-container" class="row">
@@ -16,8 +16,13 @@
         <input type="hidden" value="{{appname}}" id="appname">
         <br>
         <p>
-        Please define the features-activities mapping for app ''{{ appname }}''.
+        Please perform the following steps:
         </p>
+        <ol>
+            <li>Add a row for each feature of your app "test".</li>
+            <li>For each added feature, specify which Android activities are implementing it.</li>
+        </ol>
+        </br>
         {% from "_formhelper.html" import render_field %}
         {% from "_formhelper.html" import render_table_field %}
 

@@ -118,6 +118,7 @@ def after_questionaire(appname):
     return render_template('after_test.html')
 
 
+# Route for ajax calls that store the timestamp of the mappings
 @app.route('/store-ts/<appname>')
 def store_timestamp(appname):
     timestamp = request.args.get('timestamp', 0, int)
@@ -128,6 +129,16 @@ def store_timestamp(appname):
         csv_file.flush()
     return '', 204
 
+
+# Route for ajax calls to store mappings from the afp-app
+@app.route('/store-mapping/<appname>/<mapping>')
+def store_mapping(appname, mapping):
+    print("camado")
+    with open(os.path.join(OUT_FOLDER, '{}-deployed-mapping.csv').format(appname), 'a') as mapping_file:
+        writer = csv.writer(mapping_file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        writer.writerow([mapping])
+        mapping_file.flush()
+    return '', 204
 
 # Page not found route
 @app.errorhandler(404)

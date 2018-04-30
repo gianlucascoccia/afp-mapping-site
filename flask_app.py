@@ -133,10 +133,9 @@ def store_timestamp(appname):
 # Route for ajax calls to store mappings from the afp-app
 @app.route('/store-mapping/<appname>/<mapping>')
 def store_mapping(appname, mapping):
-    print("camado")
     with open(os.path.join(OUT_FOLDER, '{}-deployed-mapping.csv').format(appname), 'a') as mapping_file:
         writer = csv.writer(mapping_file, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        writer.writerow([mapping])
+        writer.writerow([mapping, time.time()])
         mapping_file.flush()
     return '', 204
 
